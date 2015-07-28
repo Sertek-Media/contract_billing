@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+        <record id="task_fixed_tree_view" model="ir.ui.view">
+            <field name="name">Project Fixed Tasks</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+          		<tree string = "Fixed Project Tasks" create="false" edit = "false">
+                    <field name="message_unread" invisible="1"/>
+                    <field name="sequence" invisible="not context.get('seq_visible', False)"/>
+                    <field name="name"/>
+                    <field name="project_id" icon="gtk-indent" invisible="context.get('user_invisible', False)"/>
+                    <field name="user_id" invisible="context.get('user_invisible', False)"/>
+                    <field name="delegated_user_id" invisible="context.get('show_delegated', True)"/>
+                    <field name="total_hours" invisible="1"/>
+                    <field name="planned_hours" invisible="context.get('set_visible',False)" groups="project.group_time_work_estimation_tasks"/>
+                    <field name="effective_hours" widget="float_time" sum="Spent Hours" invisible="1"/>
+                    <field name="remaining_hours" widget="float_time" sum="Remaining Hours" on_change="onchange_remaining(remaining_hours,planned_hours)" invisible="context.get('set_visible',False)" groups="project.group_time_work_estimation_tasks"/>
+                    <field name="date_deadline" invisible="context.get('deadline_visible',True)"/>
+                    <field name="stage_id" invisible="context.get('set_visible',False)"/>
+                    <!--  <field name="state" invisible="1"/> state field removed in openerp 8 --> 
+                    <field name="date_start" groups="base.group_no_one"/>
+                    <field name="date_end" groups="base.group_no_one"/>
+                    <field name="progress" widget="progressbar" invisible="context.get('set_visible',False)"/>
+               </tree>
+            </field>
+        </record>
+        <record id="action_task_bill_action" model="ir.actions.act_window">
+            <field name="name">Invoice Fixed Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_fix_invoice','=','no'),('type_billing','=','fixed'),('stage_id.done_state','=',True),('sale_order_id.state','=','manual'),]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem action="action_task_bill_action"
+            id="action_task_fixed_tab"
+            parent="project_timesheet.menu_project_billing"
+            sequence="6"  />   
+            
+
+        <record id="action_issue_bill_action" model="ir.actions.act_window">
+            <field name="name">Invoice Fixed Issue</field>
+            <field name="res_model">project.issue</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_fix_invoice','=','no'),('type_billing','=','fixed'),('stage_id.done_state','=',True),('sale_order_id.state','=','manual'),]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem action="action_issue_bill_action"
+            id="action_issue_fixed_tab"
+            parent="project_timesheet.menu_project_billing"
+            sequence="6"  />        
+
+       <record id="view_account_analytic_line_tree_inherit_list_widget" model="ir.ui.view">
+            <field name="name">account.analytic.line.tree.account_id</field>
+            <field name="model">account.analytic.line</field>
+            <field name="inherit_id" ref="account.view_account_analytic_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="account_id"  position="replace">
+                    <field name="account_id" string="Analytic account/project" on_change="on_change_account_id(account_id)"/>
+                </field>
+            </field>
+        </record>
+              
+        
+     </data>
+</openerp>

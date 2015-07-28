@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<record id="add_is_fixed_fields" model="ir.ui.view">
+			<field name="name">hr.analytic.timesheet</field>
+			<field name="model">hr.analytic.timesheet</field>
+			<field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+			<field name="arch" type="xml">
+				<xpath expr = "/tree" postion = "inside">
+					<field name="is_fixed" on_change = "onchange_is_fixed(is_fixed)"/>
+				</xpath>
+			</field>
+		</record>
+        <record id="view_analytic_account_line_invoice" model="ir.ui.view">
+            <field name="name">Invoice Fixed Tasks</field>
+            <field name ="priority" eval="2"/>
+            <field name="model">account.analytic.line</field>
+            	<field name="arch" type="xml">
+					<tree string = "Invoice Tasks" editable="top">
+	            		<button icon = "STOCK_JUMP_TO" name="get_form_view" type="object" string = "Form"/>
+	                    <field name="date"/>
+	                    <field name="ref" invisible="context.get('to_invoice', False)"/>
+	                    <field name="name"/>
+	                    <field name ="invoice_id"/>
+	                    <field name = "is_fixed"/>
+	                    <field name="to_invoice"/>
+	                    <field name="user_id"/>
+	                    <field name="journal_id" invisible="context.get('to_invoice', False)"/>
+	                    <field name="amount" sum="Total" invisible="context.get('to_invoice', False)"/>
+	                    <field name="product_id" on_change="on_change_unit_amount(product_id, unit_amount, company_id, product_uom_id, journal_id)" invisible="not context.get('to_invoice', False)"/>
+	                    <field name="unit_amount" on_change="on_change_unit_amount(product_id, unit_amount, company_id, product_uom_id)" sum="Total Quantity"/>
+	                    <field name="product_uom_id" on_change="on_change_unit_amount(product_id, unit_amount, company_id, product_uom_id)" invisible="not context.get('to_invoice', False)"/>
+	                    <field domain="[('type','=','normal')]" name="account_id" on_change="on_change_account_id(account_id)"/>
+	                    <field name="general_account_id" invisible="context.get('to_invoice', False)"/>
+	                    <field name="company_id" groups="base.group_multi_company"/>					
+					</tree>
+            	</field>
+           	</record>
+	        <record id="project_timesheet.action_project_timesheet_bill_task" model="ir.actions.act_window">
+	            <field name="name">Invoice Tasks</field>
+	            <field name="res_model">account.analytic.line</field>
+	            <field name="view_type">form</field>
+	            <field name="view_mode">tree_invoice_task</field>
+	            <field name="domain">[('is_fixed','=',False),('invoice_id','=',False),('to_invoice','!=',False)]</field>
+	            <field name="context">{'contract_billing':True,'group_by':'account_id'}</field>
+	            <!--  <field name="view_id" ref="view_analytic_account_line_invoice"/> -->
+	            <field name="help" type="html">
+	              <p>
+	                You will find here timesheets and purchases you did for contracts that can be reinvoiced to the customer.
+	                If you want to record new jobs to invoice, you should use the timesheet menu instead.
+	              </p>
+	            </field>
+	        </record>
+        	<record id="account_analytic_analysis.action_hr_tree_invoiced_all" model="ir.actions.act_window">
+	            <field name="name">Time &amp; Materials to Invoice</field>
+	            <field name="res_model">account.analytic.line</field>
+	            <field name="view_type">form</field>
+	            <field name="view_mode">tree,form</field>
+	            <field name="domain">[('is_fixed','=',False),('invoice_id','=',False),('to_invoice','!=',False)]</field>
+	            <field name="context">{'search_default_to_invoice': 1}</field>
+	            <field name="search_view_id" ref="account.view_account_analytic_line_filter"/>
+	            <field name="help" type="html">
+	              <p>
+	                You will find here timesheets and purchases you did for
+	                contracts that can be reinvoiced to the customer.  If you want
+	                to record new activities to invoice, you should use the timesheet
+	                menu instead.
+	              </p>
+	            </field>
+        	</record>  
+	</data>
+</openerp>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Adding field billing_type -->
+		<record id="view_billing_type_issue" model="ir.ui.view">
+			<field name="name">Issue Billing Type</field>
+			<field name="model">project.issue</field>
+			<field name="inherit_id" ref="project_issue.project_issue_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr = "/form/sheet/group/group" position = "inside">
+						<field name="type_billing"  options = "{'no_create':True}" required="1" on_change = "onchange_sales_order()" context = "{'project_id':project_id}"/>
+				</xpath>
+
+				<xpath expr = "/form/sheet/group/group/div[@groups='base.group_user']" position = "after">
+						<field name = 'sale_order_id' 
+						attrs = "{'required':[('type_billing','=',2)],'invisible':[('type_billing','!=',2)]}"
+						domain = "[('state','=','manual')]" 
+						/>
+						<field name="is_fix_invoice" widget="statusbar" attrs = "{'required':[('type_billing','=',2)],'invisible':[('type_billing','!=',2)]}"/>
+				</xpath>
+
+			</field>
+		</record>
+		<record id="change_view_worklog_issue" model = "ir.ui.view">
+			<field name="name">Issue Worklog</field>
+			<field name="model">project.issue</field>
+			<field name="inherit_id" ref="project_issue_sheet.project_issue_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr = "//field[@name = 'timesheet_ids']" position = 'attributes'>
+					<attribute name = "context">{'default_user_id' : user_id, 'default_account_id' : analytic_account_id, 'type_billing':type_billing}</attribute>
+				</xpath>
+				<xpath expr = "//field[@name = 'timesheet_ids']/tree/field[@name = 'account_id']" position = "attributes">
+					<attribute name = "on_change">on_change_account_id(account_id,parent.type_billing)</attribute>
+				</xpath>
+				<xpath expr = "//field[@name = 'timesheet_ids']/tree/field[@name = 'to_invoice']" position = 'attributes'>
+					<attribute name = "invisible">0</attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="1">
+		<record id = "task_type_one" model = "type.task">
+			<field name = 'name'>None</field>
+		</record>
+		<record id = "task_type_two" model = "type.task">
+			<field name = 'name'>Fixed Invoicing</field>
+		</record>
+		<record id = "task_type_three" model = "type.task">
+			<field name = 'name'>Time Invoicing</field>
+		</record>
+	</data>
+</openerp>

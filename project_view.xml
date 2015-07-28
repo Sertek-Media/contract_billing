@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Adding field billing_type -->
+		<record id="view_billing_type_task" model="ir.ui.view">
+			<field name="name">Task Billing Type</field>
+			<field name="model">project.task</field>
+			<field name="inherit_id" ref="project.view_task_form2"/>
+			<field name="arch" type="xml">
+				<!--  <xpath expr = "/form/sheet" postion = "after">
+					<widget type="selections"/>
+				</xpath> -->
+				<xpath expr = "/form/sheet/group/group/field[@name='project_id']" position = "attributes">
+					<attribute name="on_change">onchange_selection(project_id)</attribute>
+				</xpath>
+				<xpath expr = "/form/sheet/group/group" position = "inside">
+						<field name = 'sale_order_id' 
+						attrs = "{'required':[('type_billing','=',2)],'invisible':[('type_billing','!=',2)]}"
+						domain = "[('state','=','manual')]" 
+						/>
+				</xpath>
+				<xpath expr = "/form/sheet/group/group" position = "inside">
+						<field name = "type_billing" required = "1" options = "{'no_create':True}" context="{'project_id':project_id}"/>
+						<div>
+							<field name="is_fix_invoice" widget="statusbar" attrs = "{'required':[('type_billing','=',2)],'invisible':[('type_billing','!=',2)]}"/>
+						</div>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>
