@@ -285,6 +285,8 @@ class account_analytic_line(osv.osv):
                     list_ids.append(v[7])
             else:
                 list_ids.append(v[7])
+            
+        print "==================================list_ids",list_ids
         return list_ids
     
     _columns  = {

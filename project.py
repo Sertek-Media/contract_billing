@@ -57,7 +57,10 @@ class task(osv.osv):
     _description = 'Fixed or variable task'
 
             
-    def onchange_selection(self,cr,uid,id,project_id,context={}):
+    def onchange_selection(self,cr,uid,id,project_id,context=None):
+        if context == None : 
+            context = {}
+        context = dict(context)    
         context.update({'project_id':project_id})
         return {'value':{'type_billing':False}}
     
