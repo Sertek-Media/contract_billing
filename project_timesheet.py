@@ -24,7 +24,7 @@ class project_work_class(osv.osv):
         task_obj = task_obj.browse(cr, uid, vals['task_id'], context=context)
         if task_obj.type_billing.id == 1 or task_obj.type_billing.id == 2 :
             result = self.get_user_related_details(cr, uid, vals.get('user_id', uid))
-            vals_line['name'] = '%s: %s' % (tools.ustr(task_obj.name), tools.ustr(vals['name'] or '/'))
+            vals_line['name'] = '%s[%s]: %s' % (tools.ustr(task_obj.name), task_obj.sequence1,tools.ustr(vals['name'] or '/'))
             vals_line['user_id'] = vals['user_id']
             vals_line['product_id'] = result['product_id']
             if vals.get('date'):
@@ -64,7 +64,7 @@ class project_work_class(osv.osv):
                 return timeline_id
         else:
             result = self.get_user_related_details(cr, uid, vals.get('user_id', uid))
-            vals_line['name'] = '%s: %s' % (tools.ustr(task_obj.name), tools.ustr(vals['name'] or '/'))
+            vals_line['name'] = '%s[%s]: %s' % (tools.ustr(task_obj.name), tools.ustr(task_obj.sequence1),tools.ustr(vals['name'] or '/'))
             vals_line['user_id'] = vals['user_id']
             vals_line['product_id'] = result['product_id']
             if vals.get('date'):

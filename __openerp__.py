@@ -33,7 +33,7 @@ Contact Billing
     """,
     'website': 'www.intellerist.com',
     'images' : [],
-    'depends' : ['base','sale','hr_timesheet','project_timesheet','project','analytic','account_analytic_analysis','project_issue_sheet'],
+    'depends' : ['base','sale','hr_timesheet','project_timesheet','project','analytic','account_analytic_analysis','project_issue_sheet','project_task'],
     
     'data': ['project_view.xml','project_issue_view.xml','views/contract_billing.xml',
             'contract_billing_view.xml','wizard/fixed_invoice_wizard.xml','account_analytic_line_view.xml','contract_billing_data.xml'
